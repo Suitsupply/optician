@@ -249,7 +249,7 @@ class LookMLGenerator:
             view_field += f"    {group_item_label}\n"
             view_field += f"    description: {field_description}\n"
             view_field += f"    type: {lookml_type}\n"
-            view_field += f"    sql: ${{TABLE}}.{field_sql_name} ;;\n"
+            view_field += f"    sql: {lookml_type_transform[0]}${{TABLE}}.{field_sql_name}{lookml_type_transform[1]} ;;\n"
             view_field += f"  }}\n"
 
         if view_field != "":
