@@ -16,7 +16,7 @@ FIELD_TYPE_MAPPING = {
         "BOOLEAN": "yesno",
         "BOOL": "yesno",
         "TIMESTAMP": "time",
-        "TIME": "time",
+        "TIME": "string",
         "DATE": "time",
         "DATETIME": "time",
         "STRING": "string",
