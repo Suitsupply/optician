@@ -16,13 +16,19 @@ FIELD_TYPE_MAPPING = {
         "BOOLEAN": "yesno",
         "BOOL": "yesno",
         "TIMESTAMP": "time",
-        "TIME": "time",
+        "TIME": "string",
         "DATE": "time",
         "DATETIME": "time",
         "STRING": "string",
         "ARRAY": "string",
         "GEOGRAPHY": "string",
         "BYTES": "string",
+    }
+}
+
+FIELD_TYPE_TRANSFORM = {
+    "bigquery": {
+        "TIME": ["cast(", " as string)"]
     }
 }
 
@@ -131,6 +137,12 @@ class LookMLGenerator:
         return FIELD_TYPE_MAPPING[self.client.db_type].get(
             field.internal_type, "string"
         )
+    
+    def _get_looker_type_transform(self, field: db.Field):
+        # Default are empty strings before and after the source value
+        return FIELD_TYPE_TRANSFORM[self.client.db_type].get(
+            field.internal_type, ["",""]
+        )    
 
     def _build_timeframes(self):
         tf = "timeframes: [\n"
@@ -144,6 +156,7 @@ class LookMLGenerator:
         field_sql_name = field_name
         field_type = field.internal_type
         lookml_type = self._get_looker_type(field)
+        lookml_type_transform = self._get_looker_type_transform(field)        
         is_nested_field = self.client.is_nested_field(field)
         field_mode = field.mode
         field_description = field.description
@@ -224,7 +237,7 @@ class LookMLGenerator:
             view_field += f"    {timeframes}\n"
             view_field += f"    {convert_ts}\n"
             view_field += f"    {datatype}\n"
-            view_field += f"    sql: ${{TABLE}}.{field_sql_name} ;;\n"
+            view_field += f"    sql: {lookml_type_transform[0]}${{TABLE}}.{field_sql_name}{lookml_type_transform[1]} ;;\n"
             view_field += f"  }}\n"
 
         # Handle all other fields
@@ -236,7 +249,7 @@ class LookMLGenerator:
             view_field += f"    {group_item_label}\n"
             view_field += f"    description: {field_description}\n"
             view_field += f"    type: {lookml_type}\n"
-            view_field += f"    sql: ${{TABLE}}.{field_sql_name} ;;\n"
+            view_field += f"    sql: {lookml_type_transform[0]}${{TABLE}}.{field_sql_name}{lookml_type_transform[1]} ;;\n"
             view_field += f"  }}\n"
 
         if view_field != "":
