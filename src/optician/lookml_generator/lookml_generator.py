@@ -163,7 +163,7 @@ class LookMLGenerator:
             for timeframe in timeframes:
                 for time_group in TIMEFRAME_TIME_GROUP:
                     if timeframe.startswith(time_group):
-                        timeframes.remove(timeframe)
+                        #timeframes.remove(timeframe)
                         break
         tf = "timeframes: [\n"
         tf += "".join(f"      {tf},\n" for tf in timeframes[:-1])
