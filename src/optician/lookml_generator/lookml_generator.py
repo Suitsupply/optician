@@ -160,8 +160,8 @@ class LookMLGenerator:
         
         timeframes = self.timeframes.copy()
         
-        if field_type == "DATE":            
-            for timeframe in timeframes:
+        if field_type == "DATE":      
+            for timeframe in self.timeframes:
                 for time_group in TIMEFRAME_TIME_GROUP:
                     if timeframe.startswith(time_group):
                         timeframes.remove(timeframe)
