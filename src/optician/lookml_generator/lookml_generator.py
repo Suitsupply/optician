@@ -172,7 +172,6 @@ class LookMLGenerator:
                 
                 if not time_group:
                     timeframes.append(timeframe)
-        else
 
         tf = "timeframes: [\n"
         tf += "".join(f"      {tf},\n" for tf in timeframes[:-1])
