@@ -159,7 +159,7 @@ class LookMLGenerator:
         
         timeframes = self.config.get_property("timeframes", DEFAULT_TIMEFRAMES)
 
-        if field_type == "DATE":            
+        if field_type == "DATETIME":            
             for timeframe in timeframes:
                 for time_group in TIMEFRAME_TIME_GROUP:
                     if timeframe.startswith(time_group):
@@ -169,7 +169,7 @@ class LookMLGenerator:
         tf += "".join(f"      {tf},\n" for tf in timeframes[:-1])
         tf += f"      {timeframes[-1]}\n"
         tf += "    ]"
-        return field_type
+        return tf
 
     def process_field(self, field: db.Field, parent_field_name: str = None):
         field_name = field.name
