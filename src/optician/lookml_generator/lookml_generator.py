@@ -165,8 +165,8 @@ class LookMLGenerator:
                         timeframes.remove(timeframe)
                         break
         tf = "timeframes: [\n"
-        tf += "".join(f"      {tf},\n" for tf in self.timeframes[:-1])
-        tf += f"      {self.timeframes[-1]}\n"
+        tf += "".join(f"      {tf},\n" for tf in timeframes[:-1])
+        tf += f"      {timeframes[-1]}\n"
         tf += "    ]"
         return tf
 
