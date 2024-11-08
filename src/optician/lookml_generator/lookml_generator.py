@@ -128,6 +128,7 @@ class LookMLGenerator:
         )
         self.ignore_column_types = self.config.get_property("ignore_column_types", [])
         self.ignore_modes = self.config.get_property("ignore_modes", [])
+        self.timeframes = self.config.get_property("timeframes", DEFAULT_TIMEFRAMES)
 
         self.time_suffixes = self.config.get_property("time_suffixes", [])
         self.order_by = self.config.get_property("order_by", "alpha")
@@ -157,14 +158,14 @@ class LookMLGenerator:
 
     def _build_timeframes(self, field_type):
         
-        timeframes = self.config.get_property("timeframes", DEFAULT_TIMEFRAMES)
-
-        if field_type == "DATETIME":            
+        timeframes = self.timeframes.copy()
+        
+        if field_type == "DATE":            
             for timeframe in timeframes:
                 for time_group in TIMEFRAME_TIME_GROUP:
                     if timeframe.startswith(time_group):
-                        timeframes.remove(timeframe)
                         break
+                
         tf = "timeframes: [\n"
         tf += "".join(f"      {tf},\n" for tf in timeframes[:-1])
         tf += f"      {timeframes[-1]}\n"
