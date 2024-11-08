@@ -15,10 +15,10 @@ FIELD_TYPE_MAPPING = {
         "NUMERIC": "number",
         "BOOLEAN": "yesno",
         "BOOL": "yesno",
-        "TIMESTAMP": "time",
+        "TIMESTAMP": "timestamp",
         "TIME": "string",
         "DATE": "time",
-        "DATETIME": "time",
+        "DATETIME": "datetime",
         "STRING": "string",
         "ARRAY": "string",
         "GEOGRAPHY": "string",
@@ -156,6 +156,7 @@ class LookMLGenerator:
         )    
 
     def _build_timeframes(self, field_type):
+
         timeframes = self.config.get_property("timeframes", DEFAULT_TIMEFRAMES)
 
         if field_type in ["DATE"]:            
