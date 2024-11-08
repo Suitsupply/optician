@@ -26,6 +26,17 @@ FIELD_TYPE_MAPPING = {
     }
 }
 
+TIMEFRAME_TIME_GROUP = [
+        "time",
+        "time_of_day",
+        "hour",
+        "hour_of_day",
+        "minute",
+        "second",
+        "millisecond",
+        "microsecond",
+    ]
+
 FIELD_TYPE_TRANSFORM = {
     "bigquery": {
         "TIME": ["cast(", " as string)"]
@@ -118,6 +129,8 @@ class LookMLGenerator:
         self.ignore_column_types = self.config.get_property("ignore_column_types", [])
         self.ignore_modes = self.config.get_property("ignore_modes", [])
         self.timeframes = self.config.get_property("timeframes", DEFAULT_TIMEFRAMES)
+
+
         self.time_suffixes = self.config.get_property("time_suffixes", [])
         self.order_by = self.config.get_property("order_by", "alpha")
         self.capitalize_ids = self.config.get_property("capitalize_ids", True)
@@ -143,6 +156,19 @@ class LookMLGenerator:
         return FIELD_TYPE_TRANSFORM[self.client.db_type].get(
             field.internal_type, ["",""]
         )    
+    
+    def _get_looker_timeframes(self, field: db.Field):
+        
+        timeframes = self.config.get_property("timeframes", DEFAULT_TIMEFRAMES)
+
+        if field.internal_type in ["DATE"]:            
+            for timeframe in timeframes:
+                for time_group in TIMEFRAME_TIME_GROUP:
+                    if timeframe.startswith(time_group):
+                        timeframes.remove(timeframe)
+                        break
+        
+        return timeframes    
 
     def _build_timeframes(self):
         tf = "timeframes: [\n"
