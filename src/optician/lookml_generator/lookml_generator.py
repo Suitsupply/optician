@@ -158,9 +158,10 @@ class LookMLGenerator:
 
     def _build_timeframes(self, field_type):
         
-        timeframes = []
+        timeframes = self.timeframes
         
-        if field_type == "DATE":            
+        if field_type == "DATE":    
+            timeframes = []        
             for timeframe in self.timeframes:
 
                 time_group = False
@@ -171,6 +172,7 @@ class LookMLGenerator:
                 
                 if not time_group:
                     timeframes.append(timeframe)
+        else
 
         tf = "timeframes: [\n"
         tf += "".join(f"      {tf},\n" for tf in timeframes[:-1])
