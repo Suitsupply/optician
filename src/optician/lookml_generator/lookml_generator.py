@@ -128,8 +128,6 @@ class LookMLGenerator:
         )
         self.ignore_column_types = self.config.get_property("ignore_column_types", [])
         self.ignore_modes = self.config.get_property("ignore_modes", [])
-        self.timeframes = self.config.get_property("timeframes", DEFAULT_TIMEFRAMES)
-
 
         self.time_suffixes = self.config.get_property("time_suffixes", [])
         self.order_by = self.config.get_property("order_by", "alpha")
@@ -156,21 +154,16 @@ class LookMLGenerator:
         return FIELD_TYPE_TRANSFORM[self.client.db_type].get(
             field.internal_type, ["",""]
         )    
-    
-    def _get_looker_timeframes(self, field: db.Field):
-        
+
+    def _build_timeframes(self, field_type):
         timeframes = self.config.get_property("timeframes", DEFAULT_TIMEFRAMES)
 
-        if field.internal_type in ["DATE"]:            
+        if field_type in ["DATE"]:            
             for timeframe in timeframes:
                 for time_group in TIMEFRAME_TIME_GROUP:
                     if timeframe.startswith(time_group):
                         timeframes.remove(timeframe)
                         break
-        
-        return timeframes    
-
-    def _build_timeframes(self):
         tf = "timeframes: [\n"
         tf += "".join(f"      {tf},\n" for tf in self.timeframes[:-1])
         tf += f"      {self.timeframes[-1]}\n"
@@ -247,7 +240,7 @@ class LookMLGenerator:
 
         # Handle time fields
         elif lookml_type == "time":
-            timeframes = self._build_timeframes()
+            timeframes = self._build_timeframes(field_type)
             # if field name ends with _at, _time, or _date
             if len(self.time_suffixes) > 0:
                 for s in self.time_suffixes:
