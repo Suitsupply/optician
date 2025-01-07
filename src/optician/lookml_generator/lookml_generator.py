@@ -185,7 +185,7 @@ class LookMLGenerator:
         pk = ""
         convert_ts = ""
         datatype = ""
-        group_label = ""
+        group_label = field.group_label
         group_item_label = ""
         hidden = ""
         view_field = ""

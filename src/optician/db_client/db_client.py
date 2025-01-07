@@ -69,6 +69,7 @@ class BQClient:
                 internal_type=schema_field.field_type,
                 mode=schema_field.mode,
                 description=schema_field.description,
+                group_label=schema_field.group_label,
             )
 
             # If the field is a nested field, add the nested fields to the schema
@@ -79,6 +80,7 @@ class BQClient:
                         internal_type=nested_field.field_type,
                         mode=nested_field.mode,
                         description=nested_field.description,
+                        group_label=nested_field.group_label,
                     )
                     field.add_nested_field(nested_field)
 
@@ -98,6 +100,7 @@ class Field:
         internal_type: str,
         mode: str,
         description: str,
+        group_label: str,
     ) -> None:
         """Initialisation of the field
 
@@ -106,10 +109,12 @@ class Field:
             internal_type (str): Type of the field. Depends on the data warehouse engine.
             mode (str): Mode of the field. In BigQuery, can be NULLABLE, REQUIRED or REPEATED.
             description (str): Description of the field.
+            group_label (str): Group label of the field.
         """
         self.name = name
         self.internal_type = internal_type
         self.description = description
+        self.group_label = group_label
         self.mode = mode
         self.fields = []
 
@@ -121,6 +126,7 @@ class Field:
             and self.internal_type == other.internal_type
             and self.mode == other.mode
             and self.description == other.description
+            and self.group_label == other.group_label
             and self.fields == other.fields
         )
 
@@ -135,6 +141,9 @@ class Field:
 
     def get_description(self):
         return self.description
+
+    def get_group_label(self):
+        return self.group_label
 
     def add_nested_field(self, field):
         self.fields.append(field)
