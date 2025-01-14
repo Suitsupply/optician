@@ -1,7 +1,9 @@
 # pyproject.toml
 
-[tool.poetry]
+[project]
 name = "optician"
+
+[tool.poetry]
 version = "1.1.1"
 description = "Sync your data warehouse tables to Looker"
 authors = [
